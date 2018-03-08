@@ -1,13 +1,15 @@
-###replace the text in quotes with the path to your experiment folder.
-experiment.folder<-("/users/Aaron/Desktop/E338")
+###Axoquant2.0
 
-experiment.folder<-("~/Dropbox/Aaron R stuff/experiment")
-
-###Run the code below without changing any text.
-
-
+###Please replace the example text in quotes with the path to your experiment folder.
+experiment.folder<-("/users/Aaron/Desktop/test")
 source("http://bioconductor.org/biocLite.R")
-biocLite("EBImage")
+
+###You will be asked to download Bioconductor by executing the next line. You will require an internet connection. 
+###Please allow it to download before proceeding.
+
+biocLite("EBImage")                     
+
+
 library("EBImage")
 setwd(experiment.folder)
 
@@ -123,7 +125,7 @@ Image.process <-function(Path, output_directory, colour,threshold=NA){   ###To u
     Finaldata[is.na(Finaldata)] <- 0
     Finaldata<-Finaldata[5:80,]
     Temp<-Finaldata[,1]
-    plot(Temp, type="l", main=paste("",Directory[a,1],".pdf", sep=""), xlab="Distance from soma in 50 micron units", ylab="Axon density",ylim=c(0,1), xlim=c(0,80),col=colour)
+    plot(Temp, type="l", main=paste("",Directory[a,1],".pdf", sep=""), xlab="Distance from soma in 50 pixel units", ylab="Axon density",ylim=c(0,1), xlim=c(0,80),col=colour)
     #Loop through to add lines
     for(i in 1:(dim(Finaldata)[2])){
       Temp<-Finaldata[,i]
@@ -156,7 +158,7 @@ Image.process <-function(Path, output_directory, colour,threshold=NA){   ###To u
   for(i in 1:ncol(Finaloutput)){
     Tempo<-Finaloutput[,i]
     lines(Tempo, col=colorsMean[i],lwd=4)
-    namesMean[i] <- paste("mean-ngf",i,sep="")
+    namesMean[i] <- paste("folder_mean",i,sep="")
   }
   legend('topright', namesMean, lty=1, lwd=4, col=colorsMean, bty='o', cex=.75)
   dev.off()
@@ -174,6 +176,5 @@ Image.process <-function(Path, output_directory, colour,threshold=NA){   ###To u
 ##Begin the image analysis
 Parent <- Image.process(experiment.folder, experiment.folder,"blue",threshold=NA)
 
-write.table(Parent$Individual_measurements,"Master_IndvMeasure.csv", sep=",", row.names=FALSE)
-write.table(Parent$Mean_values,"Master_MeanVal.csv", sep=",", row.names=FALSE)
-
+write.table(Parent$Individual_measurements,"Individual_measurements.csv", sep=",", row.names=FALSE)
+write.table(Parent$Mean_values,"Embryo_Means.csv", sep=",", row.names=FALSE)
